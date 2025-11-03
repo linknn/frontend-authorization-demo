@@ -3,7 +3,7 @@ import { useState } from "react";
 import Logo from "./Logo";
 import "./styles/Register.css";
 
-const Register = () => {
+const Register = ({ handleRegistration }) => {
   const [data, setData] = useState({
     username: "",
     email: "",
@@ -19,11 +19,16 @@ const Register = () => {
     }));
   };
 
+  const onRegistration = (evt) => {
+    evt.preventDefault();
+    handleRegistration(data);
+  };
+
   return (
     <div className="register">
       <Logo title={"CryptoDucks"} />
       <p className="register__welcome">Please register.</p>
-      <form className="register__form">
+      <form className="register__form" onSubmit={onRegistration}>
         <label htmlFor="username">Username:</label>
         <input
           id="username"
@@ -33,13 +38,7 @@ const Register = () => {
           onChange={handleChange}
         />
         <label htmlFor="email">Email:</label>
-        <input
-          id="email"
-          name="email"
-          type="email"
-          value={data.email}
-          onChange={handleChange}
-        />
+        <input id="email" name="email" type="email" value={data.email} onChange={handleChange} />
         <label htmlFor="password">Password:</label>
         <input
           id="password"
