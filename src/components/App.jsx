@@ -12,7 +12,6 @@ import * as auth from "../utils/auth";
 import "./styles/App.css";
 
 function App() {
-  // eslint-disable-next-line no-unused-vars
   const [userData, setUserData] = useState({ username: "", email: "" });
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
@@ -24,7 +23,7 @@ function App() {
       auth
         .register(username, password, email)
         .then(() => {
-          // TODO: handle succesful registration
+          // handle succesful registration
           navigate("/login");
         })
         .catch(console.error);
@@ -65,7 +64,7 @@ function App() {
         path="/my-profile"
         element={
           <ProtectedRoute isLoggedIn={isLoggedIn}>
-            <MyProfile />
+            <MyProfile userData={userData} />
           </ProtectedRoute>
         }
       />
