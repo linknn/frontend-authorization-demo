@@ -18,14 +18,14 @@ function App() {
 
   const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   const jwt = getToken();
+  useEffect(() => {
+    const jwt = getToken();
 
-  //   if (!jwt) {
-  //     return;
-  //   }
-  //   // TODO - handle JWT
-  // }, []);
+    if (!jwt) {
+      return;
+    }
+    // TODO - handle JWT
+  }, []);
   // Since the dependency array is empty, the code in this useEffect will only be run when the App component first loads. It attempts to retrieve a JWT from local storage, and if it isn’t present, it returns without doing anything else
 
   const handleRegistration = ({ username, email, password, confirmPassword }) => {
