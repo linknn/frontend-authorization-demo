@@ -13,6 +13,7 @@ import "./styles/App.css";
 
 function App() {
   // eslint-disable-next-line no-unused-vars
+  const [userData, setUserData] = useState({ username: "", email: "" });
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const navigate = useNavigate();
@@ -40,8 +41,12 @@ function App() {
     auth
       .authorize(username, password)
       .then((data) => {
-        //  TODO update: for now we just log the response data to the console
-        console.log(data);
+        // Verify that a jwt is included before logging the user in.
+        if (data.jwt) {
+          setUserData(data.user); //save user's data to state
+          setIsLoggedIn(true); //log the user in
+          navigate("/ducks"); //send them to /ducks
+        }
       })
       .catch(console.error);
   };
