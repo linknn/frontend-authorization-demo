@@ -16,8 +16,10 @@ import "./styles/App.css";
 function App() {
   const [userData, setUserData] = useState({ username: "", email: "" });
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-
   const navigate = useNavigate();
+
+  // invoke the hook
+  const location = useLocation();
 
   useEffect(() => {
     const jwt = getToken();
@@ -32,7 +34,6 @@ function App() {
         //if response is successful, log the user in, save their data to state and navigate them to /ducks
         setIsLoggedIn(true);
         setUserData({ username, email });
-        navigate("/ducks");
       })
       .catch(console.error);
   }, []);
@@ -66,10 +67,12 @@ function App() {
           setToken(data.jwt); // save token to local storage
           setUserData(data.user); //save user's data to state
           setIsLoggedIn(true); //log the user in
-          navigate("/ducks"); //send them to /ducks
+
+          const redirectPath = location.state?.from?.pathname || "/ducks";
+          navigate(redirectPath); //send them to /ducks
         }
       })
-      .catch((err) => console.log(err));
+      .catch(console.error);
   };
 
   return (
@@ -93,17 +96,21 @@ function App() {
       <Route
         path="/login"
         element={
-          <div className="loginContainer">
-            <Login handleLogin={handleLogin} />
-          </div>
+          <ProtectedRoute isLoggedIn={isLoggedIn} anonymous>
+            <div className="loginContainer">
+              <Login handleLogin={handleLogin} />
+            </div>
+          </ProtectedRoute>
         }
       />
       <Route
         path="/register"
         element={
-          <div className="registerContainer">
-            <Register handleRegistration={handleRegistration} />
-          </div>
+          <ProtectedRoute isLoggedIn={isLoggedIn} anonymous>
+            <div className="registerContainer">
+              <Register handleRegistration={handleRegistration} />
+            </div>
+          </ProtectedRoute>
         }
       />
       <Route
