@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
-import { setToken } from "../utils/token";
+import { getToken, setToken } from "../utils/token";
 
 import Ducks from "./Ducks";
 import Login from "./Login";
@@ -9,6 +9,7 @@ import Register from "./Register";
 import ProtectedRoute from "./ProtectedRoute";
 
 import * as auth from "../utils/auth";
+import * as api from "../utils/api";
 
 import "./styles/App.css";
 
@@ -24,7 +25,16 @@ function App() {
     if (!jwt) {
       return;
     }
-    // TODO - handle JWT
+    // handle JWT
+    api
+      .getUserInfo(jwt)
+      .then(({ username, email }) => {
+        //if response is successful, log the user in, save their data to state and navigate them to /ducks
+        setIsLoggedIn(true);
+        setUserData({ username, email });
+        navigate("/ducks");
+      })
+      .catch(console.error);
   }, []);
   // Since the dependency array is empty, the code in this useEffect will only be run when the App component first loads. It attempts to retrieve a JWT from local storage, and if it isn’t present, it returns without doing anything else
 
